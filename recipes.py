@@ -35,6 +35,12 @@ class Coffee:
     def get_price(self):
         return self.price
 
+    def set_recipe(self, recipe: Recipes):
+        return self.recipe
+
+    def get_recipe(self):
+        return self.recipe
+
 class Pizza:
     def __init__(self, name: str, size: str, recipe: Recipes):
         self.name = name
