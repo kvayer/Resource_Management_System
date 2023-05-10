@@ -15,15 +15,25 @@ class Coffee:
         self.name = name
         self.size = size
         self.recipe = recipe
+        self.price = None
 
-    def get_coffee_name(self):
+    def set_name(self, name: str):
+        self.name = name
+
+    def get_name(self):
         return self.name
 
-    def get_coffee_size(self):
+    def set_size(self, size: str):
+        self.size = size
+
+    def get_size(self):
         return self.size
 
-    def get_coffee_recipe(self):
-        return self.recipe
+    def set_price(self, price: float):
+        self.price = price
+
+    def get_price(self):
+        return self.price
 
 class Pizza:
     def __init__(self, name: str, size: str, recipe: Recipes):
@@ -31,16 +41,19 @@ class Pizza:
         self.size = size
         self.recipe = recipe
         self.additive_list = []
-    def get_pizza_name(self):
+    def get_name(self):
         return self.name
 
-    def get_pizza_size(self):
+    def set_size(self, size: str):
+        self.size = size
+
+    def get_size(self):
         return self.size
 
-    def get_pizza_ingredients(self):
+    def get_ingredients(self):
         return self.recipe.ingredients
 
-    def get_pizza_cooking_sequence(self):
+    def get_cooking_sequence(self):
         return self.recipe.cooking_sequence
 
     def ingredient_in_recipe(self, additive: str):
