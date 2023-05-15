@@ -3,11 +3,12 @@ class Warehouse:
     def __init__(self):
         self.products = {}
 
-    def add_product(self, product_name: str, quantity: int):
-        if product_name in self.products:
-            self.products[product_name] += quantity
-        else:
-            self.products[product_name] = quantity
+    def add_product(self, products: dict[str: int]):       # {'carrot':1, 'cabbage': 2}
+        for product, amount in products.items():
+            if product in self.products:
+                self.products[product] += amount
+            else:
+                self.products[product] = amount
 
     def can_use_product(self, product_name: str, quantity: int):
         if product_name in self.products:
@@ -46,3 +47,6 @@ class Warehouse:
                 print(f"{product_name}: {quantity}")
         else:
             print("Склад пуст.")
+
+warehouse = Warehouse()
+warehouse.add_product({'carrot':1, 'cabbage': 2})
