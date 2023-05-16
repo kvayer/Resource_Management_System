@@ -1,3 +1,7 @@
+from equipment import Equipment
+from warehouse import Warehouse
+
+
 class Recipe:
     def __init__(self, ingredients: dict[str: float], cooking_sequence: dict[str: str]):
         self.ingredients = ingredients
@@ -39,9 +43,9 @@ class Pizza:
                 return 0
 
 class Drink:
-    def __init__(self, name: str, size: float, recipe: Recipe, additions: dict[str: float] = None):
+    def __init__(self, name: str, recipe: Recipe, additions: dict[str: float] = None):
         self.name = name
-        self.size = size
+        self.size = None
         self.recipe = recipe
         self.additions = additions
         self.price = None
@@ -71,19 +75,20 @@ class Menu:
         self.pizzas: list[Pizza] = []
         self.drinks: list[Drink] = []
 
-    def make_choice(self):
+    def make_choice(self, warehouse):
         end_choice = [[], []]
         while True:
-            choice = input("What do u want?\n1. Coffe\n2. Pizza\n3. Exit\nAnswer: ")
+            choice = input("What do u want?\n1. Coffee\n2. Pizza\n3. Exit\nAnswer: ")
             if choice == 'Coffee' or choice == "1":
                 print('Which coffee do you want?')
                 if len(self.drinks) == 0:
-                    print("We've no coffe yet.")
+                    print("We've no coffee yet.")
                     continue
                 for i in range(len(self.drinks)):
-                    print(str(i+1)+". \"" + self.drinks[i].name + "\" - ", self.drinks[i].size, end='\n')
+                    print(str(i+1)+". \"" + self.drinks[i].name + "\"")
                 choice = input("Answer(name): ")
-                end_choice[0].append(choice)
+                choice_size = input("Какого размера?(стандарт/большой): ")
+                end_choice[0].append([choice, choice_size])
                 continue
             elif choice == 'Pizza' or choice == "2":
                 print('Which pizza do you want?')
@@ -91,38 +96,38 @@ class Menu:
                     print("We've no pizza yet.")
                     continue
                 for i in range(1, len(self.pizzas)):
-                    print(str(i+1)+". \"" + self.pizzas[i].name + "\" - ", self.pizzas[i].size, end='\n')
+                    print(str(i+1)+". \"" + self.pizzas[i].name + "\"")
                 choice = input("Answer(name): ")
+                choice_size = input("Какого размера?(стандарт/большая): ")
+                end_choice[0].append([choice, choice_size])
                 end_choice[1].append(choice)
                 continue
             elif choice == 'Exit' or choice == "3":
                 break
         return end_choice
 
-
+coff_machine1 = Equipment("Кофе машина", "Свободна", True)
 
 menu = Menu()
 
-menu.drinks.append(Drink("Hui", 0.5, Recipe({'per': 1, 'vtoroi': 2}, {'just_do': 'ok'})))
-menu.drinks.append(Drink("Pizda", 1, Recipe({'per': 1, 'vtoroi': 2}, {'just_do': 'ok'})))
-menu.drinks.append(Drink("Chelovek", 0.7, Recipe({'per': 1, 'vtoroi': 2}, {'just_do': 'ok'})))
-menu.pizzas.append(Pizza("Пеперони", 0.5, Recipe({'перец': 1, 'тесто': 2}, {'just_do': 'ok'})))
+menu.drinks.append(Drink("Эспрессо", Recipe({'кофе': 8.5}, {'темпер': 'прессовать'})))
+menu.drinks.append(Drink("Американо", Recipe({'кофе': 9, 'вода': 250}, {'темпер': 'прессовать', 'чайник':"добавить воды"})))
+menu.drinks.append(Drink("Латте", Recipe({'кофе': 0.3, 'молоко': 0.6}, {'кофе машина': 'подогреть', "стакан": "перелить молоко"})))
 
-# for drink in menu.drinks:
-#     print(drink.name, drink.size, drink.recipe.ingredients)
-#
-# make_choice = menu.make_choice()
-# if len(make_choice[0]) > 0 or len(make_choice[1]) > 0:
-#     for i in range(len(make_choice[0])):
-#         print("We are doint ur", make_choice[0][i])
-#     for i in range(len(make_choice[1])):
-#         print("We are doint ur", make_choice[1][i])
-# else:
-#     print("U didnt do your order;(")
 
-print(menu.pizzas[0].recipe.ingredients)
-menu.pizzas[0].add_ingredients({'перец': 8, "тесто": 3, "грибы": 1})
-print(menu.pizzas[0].recipe.ingredients)
-menu.pizzas[0].remove_ingredients({'перец': 8, "тесто": 3, "грибы": 1})
-print(menu.pizzas[0].recipe.ingredients)
-menu.pizzas[0].remove_ingredients({"грибы": 1})
+for drink in menu.drinks:
+    print(drink.name, drink.size, drink.recipe.ingredients)
+
+
+warehouse = Warehouse()
+warehouse.add_product({'кофе': 0.3, 'молоко': 0.6})
+
+
+make_choice = menu.make_choice(warehouse)
+if len(make_choice[0]) > 0 or len(make_choice[1]) > 0:
+    for i in range(len(make_choice[0])):
+        print("We are doing ur", make_choice[0][i])
+    for i in range(len(make_choice[1])):
+        print("We are doing ur", make_choice[1][i])
+else:
+    print("U didnt do your order;(")
